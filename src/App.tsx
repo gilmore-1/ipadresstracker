@@ -1,106 +1,10 @@
-import { CSSProperties, useState } from 'react';
+import { useState } from 'react';
 import { LatLngLiteral, LatLngTuple } from 'leaflet';
-import { MapContainer, Marker, Popup, TileLayer, useMapEvents } from 'react-leaflet';
+import { MapContainer, TileLayer } from 'react-leaflet';
+import { styled } from './style'; 
+import {IpAddressInfo} from './interface';
+import LocationMarker from './LocationMarker';
 
-interface IpAddressInfo {
-  ip: string;
-  isp: string;
-  location: {
-    country: string;
-    region: string;
-    city: string;
-    lat: number;
-    lng: number;
-    postalCode: string;
-    timezone: string;
-    geonameId: number;
-  };
-  as: {
-    asn: number;
-    name: string;
-    route: string;
-    domain: string;
-    type: string;
-  };
-}
-const styled = {
-  head: {
-    container: {
-      display: "flex",
-      flexDirection: 'column' as CSSProperties['flexDirection'],
-      padding: "60px",
-      justifyContent: "center",
-      alignItems: "center",
-      width: "100%",
-      backgroundColor: "blue" as CSSProperties['backgroundColor'],
-    },
-    subcontaner: {
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
-      marginTop: "30px"
-    },
-    h1: {
-      color: "#FFF",
-      fontFamily: "Rubik",
-      fontSize: "32px",
-      fontStyle: "normal",
-      fontWeight: 500,
-      lineHeight: "30px",
-      letterSpacing: "-0.286px",
-    },
-    input: {
-      borderRadius: "15px",
-      background: "#FFF",
-      boxShadow: "0px 50px 50px -25px rgba(0, 0, 0, 0.10)",
-      width: "550px",
-      padding: "20px",
-      color: "#2C2C2C",
-      fontFamily: "Rubik",
-      fontSize: "18px",
-      fontWeight: 400,
-      lineHeight: "normal",
-    }
-  },
-  mapbody: {
-    infowrapper: {
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center"
-    },
-    info: {
-      display: "flex",
-      justifyContent: "space-between",
-      alignItems: "center",
-      borderRadius: "15px",
-      width: "1110px",
-      padding: "50px",
-      background: "#FFF",
-      boxShadow: "0px 50px 50px -25px rgba(0, 0, 0, 0.10)",
-      color: "black"
-    },
-    h3: {
-      color: "#2C2C2C",
-      fontFamily: "Rubik",
-      fontSize: "12px",
-      fontStyle: "normal",
-      fontWeight: 700,
-      lineHeight: "normal",
-      letterSpacing: "1.75px",
-      textTransform: "uppercase" as CSSProperties['textTransform'],
-      opacity: 0.4987,
-    },
-    p: {
-      color: "#2C2C2C",
-      fontSize: "26px",
-      fontWeight: 500,
-      marginTop: "15px",
-      width: "215px",
-      lineHeight: "30px",
-      letterSpacing: "-0.232px",
-    }
-  }
-}
 function App() {
   const [position, setPosition] = useState<LatLngLiteral | LatLngTuple | undefined>(undefined);
   const [allData, setAllData] = useState<IpAddressInfo | null>(null);
@@ -191,22 +95,5 @@ function App() {
   );
 }
 export default App;
-function LocationMarker({ position, setPosition }: { position: LatLngLiteral | LatLngTuple | undefined, setPosition: React.Dispatch<React.SetStateAction<LatLngLiteral | LatLngTuple | undefined>> }) {
-  const map = useMapEvents({
-    click() {
-      map.locate()
-    },
-    locationfound(e) {
-      setPosition(e.latlng)
-      map.flyTo(e.latlng, map.getZoom())
-    },
-  })
-
-  return !position ? null : (
-    <Marker position={position}>
-      <Popup>You are here</Popup>
-    </Marker>
-  )
-}
 
 
